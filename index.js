@@ -34,11 +34,11 @@ function generate100Movies() {
         desc: "84 years later, a 101-year-old woman named Rose tells the story to her granddaughter about her life set in April 10th 1912, on a ship called Titanic."
     });
 
-    for (let i = 1; i <= 100; i++) {
+    for(let i=1; i<=100; i++) {
         const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
         const noun = nouns[Math.floor(Math.random() * nouns.length)];
         const genre = genres[Math.floor(Math.random() * genres.length)];
-
+        
         // Generate Description
         const p1 = plotOpeners[Math.floor(Math.random() * plotOpeners.length)];
         const p2 = plotActions[Math.floor(Math.random() * plotActions.length)];
@@ -70,9 +70,9 @@ function render() {
     const grid = document.getElementById('grid');
     const sliceEnd = page * itemsPerPage;
     const currentSlice = displayMovies.slice(0, sliceEnd);
-
-    if (page === 1) grid.innerHTML = '';
-
+    
+    if(page === 1) grid.innerHTML = '';
+    
     grid.innerHTML = currentSlice.map(m => {
         const isFav = favorites.includes(m.id);
         return `
@@ -99,24 +99,24 @@ function render() {
 // --- 3. FILTERING ---
 function applyFilter(category, el) {
     document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    if (el) el.classList.add('active');
+    if(el) el.classList.add('active');
     page = 1;
-
-    if (category === 'All') displayMovies = allMovies.filter(m => m.id !== 9999);
+    
+    if(category === 'All') displayMovies = allMovies.filter(m => m.id !== 9999);
     else if (category === 'favorites') displayMovies = allMovies.filter(m => favorites.includes(m.id));
     else displayMovies = allMovies.filter(m => m.genre === category && m.id !== 9999);
-
+    
     render();
 }
 
 // --- 4. FAVORITES ---
 function toggleFav(id) {
-    if (favorites.includes(id)) favorites = favorites.filter(fav => fav !== id);
+    if(favorites.includes(id)) favorites = favorites.filter(fav => fav !== id);
     else favorites.push(id);
     localStorage.setItem('cs_favs', JSON.stringify(favorites));
     render();
 }
-function toggleFilter(type) { if (type === 'favorites') applyFilter('favorites', null); }
+function toggleFilter(type) { if(type === 'favorites') applyFilter('favorites', null); }
 function updateFavCount() {
     const badge = document.getElementById('fav-count');
     badge.innerText = favorites.length;
@@ -138,7 +138,7 @@ const modal = document.getElementById('modal');
 function openTrailer(id) {
     // Find movie data by ID
     const movie = allMovies.find(m => m.id === id);
-    if (!movie) return;
+    if(!movie) return;
 
     // Populate Text
     document.getElementById('m-title').innerText = movie.title;
@@ -146,11 +146,11 @@ function openTrailer(id) {
     document.getElementById('m-year').innerText = movie.year;
     document.getElementById('m-genre').innerText = movie.genre;
     document.getElementById('m-rating').innerText = `${Math.floor(movie.rating * 10)}% Match`;
-
+    
     // Embed YouTube
     const container = document.getElementById('video-container');
     container.innerHTML = `<iframe src="https://www.youtube.com/embed/${movie.trailer}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-
+    
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
@@ -160,6 +160,6 @@ function closeModal() {
     document.getElementById('video-container').innerHTML = '';
     document.body.style.overflow = 'auto';
 }
-window.onclick = function (event) { if (event.target == modal) closeModal(); }
+window.onclick = function(event) { if (event.target == modal) closeModal(); }
 
 render();
